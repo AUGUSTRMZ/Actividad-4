@@ -10,13 +10,15 @@ Exercises
 """
 
 from random import choice
-import turtle
+from turtle import Turtle, bgcolor, clear, up, goto
+from turtle import tracer, listen, onkey, done
+from turtle import dot, update, ontimer, setup, hideturtle
 
 from freegames import floor, vector
 
 state = {'score': 0}
-path = turtle.Turtle(visible=False)
-writer = turtle.Turtle(visible=False)
+path = Turtle(visible=False)
+writer = Turtle(visible=False)
 aim = vector(5, 0)
 pacman = vector(-40, -80)
 ghosts = [
@@ -53,8 +55,8 @@ tiles = [
 
 def square(x, y):
     """Draw square using path at (x, y)."""
-    path.turtle.up()
-    path.turtle.goto(x, y)
+    path.up()
+    path.goto(x, y)
     path.down()
     path.begin_fill()
 
@@ -90,7 +92,7 @@ def valid(point):
 
 def world():
     """Draw world using path."""
-    turtle.bgcolor('black')
+    bgcolor('black')
     path.color('blue')
 
     for index in range(len(tiles)):
@@ -102,9 +104,9 @@ def world():
             square(x, y)
 
             if tile == 1:
-                path.turtle.up()
-                path.turtle.goto(x + 10, y + 10)
-                path.turtle.dot(2, 'white')
+                path.up()
+                path.goto(x + 10, y + 10)
+                path.dot(2, 'white')
 
 
 def move():
@@ -112,7 +114,7 @@ def move():
     writer.undo()
     writer.write(state['score'])
 
-    turtle.clear()
+    clear()
 
     if valid(pacman + aim):
         pacman.move(aim)
@@ -126,9 +128,9 @@ def move():
         y = 180 - (index // 20) * 20
         square(x, y)
 
-    turtle.up()
-    turtle.goto(pacman.x + 10, pacman.y + 10)
-    turtle.dot(20, 'yellow')
+    up()
+    goto(pacman.x + 10, pacman.y + 10)
+    dot(20, 'yellow')
 
     for point, course in ghosts:
         if valid(point + course):
@@ -144,17 +146,17 @@ def move():
             course.x = plan.x
             course.y = plan.y
 
-        turtle.up()
-        turtle.goto(point.x + 10, point.y + 10)
-        turtle.dot(20, 'red')
+        up()
+        goto(point.x + 10, point.y + 10)
+        dot(20, 'red')
 
-    turtle.update()
+    update()
 
     for point, course in ghosts:
         if abs(pacman - point) < 20:
             return
 
-    turtle.ontimer(move, 100)
+    ontimer(move, 100)
 
 
 def change(x, y):
@@ -164,17 +166,17 @@ def change(x, y):
         aim.y = y
 
 
-turtle.setturtle.up(420, 420, 370, 0)
-turtle.hideturtle()
-turtle.tracer(False)
-writer.turtle.goto(160, 160)
+setup(420, 420, 370, 0)
+hideturtle()
+tracer(False)
+writer.goto(160, 160)
 writer.color('white')
 writer.write(state['score'])
-turtle.listen()
-turtle.onkey(lambda: change(5, 0), 'Right')
-turtle.onkey(lambda: change(-5, 0), 'Left')
-turtle.onkey(lambda: change(0, 5), 'Up')
-turtle.onkey(lambda: change(0, -5), 'Down')
+listen()
+onkey(lambda: change(5, 0), 'Right')
+onkey(lambda: change(-5, 0), 'Left')
+onkey(lambda: change(0, 5), 'Up')
+onkey(lambda: change(0, -5), 'Down')
 world()
 move()
-turtle.done()
+done()
